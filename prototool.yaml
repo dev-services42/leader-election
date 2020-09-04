@@ -1,0 +1,13 @@
+protoc:
+  version: 3.8.0
+  includes:
+lint:
+  group: uber2
+generate:
+  go_options:
+    import_path: github.com/dev-services42/leader-election/contracts
+  plugins:
+    - name: gogofaster
+      type: gogo
+      flags: plugins=grpc
+      output: ./gen

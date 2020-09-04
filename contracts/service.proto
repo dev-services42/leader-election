@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package service;
+
+
+service LeaderElectionService {
+  rpc SubscribeOnLeader (SubscribeOnLeaderRequest) returns (stream SubscribeOnLeaderResponse) {
+  }
+}
+
+message SubscribeOnLeaderRequest {
+}
+
+message SubscribeOnLeaderResponse {
+  bool is_leader = 1;
+}
