@@ -9,6 +9,9 @@ import (
 	"github.com/dev-services42/leader-election/facade"
 	"github.com/hashicorp/consul/api"
 	"go.uber.org/zap"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -57,10 +60,20 @@ func main() {
 
 	checkErr(logger, srvDomain.Run(ctx))
 
-	facadeInst, err := facade.New(logger, grpcAddr, srvDomain)
+	srvFacade, err := facade.New(logger, grpcAddr, srvDomain)
 	checkErr(logger, err)
 
-	checkErr(logger, facadeInst.Run(ctx))
+	checkErr(logger, srvFacade.Run(ctx))
 
-	<-make(chan int)
+	signalCh := make(chan os.Signal, 1)
+	signal.Notify(signalCh, os.Interrupt, syscall.SIGTERM)
+
+	sig := <-signalCh
+	logger.Info("receive signal", zap.String("signal", sig.String()))
+
+	signal.Stop(signalCh)
+	cancel()
+
+	srvFacade.Wait()
+	srvDomain.Wait()
 }
