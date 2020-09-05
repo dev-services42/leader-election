@@ -3,7 +3,7 @@ FROM golang:1.15 AS builder
 RUN mkdir /app
 WORKDIR /app
 
-COPY go.* .
+COPY go.* ./
 RUN go mod download
 
 COPY . .
