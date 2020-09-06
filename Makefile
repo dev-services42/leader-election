@@ -14,4 +14,4 @@ build:
 
 .PHONY: build-docker
 build-docker:
-	docker build -f Dockerfile .
+	docker build -f Dockerfile -t devservices42/leader-election:latest .
